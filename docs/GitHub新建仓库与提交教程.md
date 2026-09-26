@@ -23,7 +23,24 @@
 
 Safari登录状态与Git命令行凭据是两回事。命令行首次推送需要配置GitHub认证（例如GitHub Desktop正常登录）；GitHub账号密码不能直接作为HTTPS推送密码。
 
-已有仓库先克隆一次：
+本机已准备GitHub官方CLI，路径为`~/.local/bin/gh`。首次认证可运行：
+
+```sh
+~/.local/bin/gh auth login --hostname github.com --git-protocol https --web
+~/.local/bin/gh auth setup-git
+```
+
+按提示在浏览器完成一次性代码验证与授权，不要把令牌写到代码或发给别人。
+
+本次项目已经在`/Users/sunyicheng/Documents/homework/campusclaw`，后续直接进入此目录修改，不需要重新创建仓库。首次把已有本地项目关联空仓库时，通常执行：
+
+```sh
+# 本次项目已完成初始化、提交和远端关联，无需重复这些准备步骤
+git remote add origin https://github.com/NicoXDav/campusclaw-course-project.git
+git push -u origin main
+```
+
+在另一台电脑使用已有仓库时，先克隆一次：
 
 ```sh
 git clone https://github.com/NicoXDav/campusclaw-course-project.git
