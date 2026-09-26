@@ -1,5 +1,7 @@
 # CampusClaw · 本班可追溯知识库
 
+开发仓库：[NicoXDav/campusclaw-course-project](https://github.com/NicoXDav/campusclaw-course-project) · [GitHub新建与提交教程](docs/GitHub新建仓库与提交教程.md)
+
 **价值**：在本班教学材料中找到可核验的知识，降低逐份翻阅资料的成本。  
 **场景**：教师上传讲义 → 系统切分并建立向量索引 → 学生检索 → 打开段落出处；配置生成网关后可得到带引用短回答。  
 **不做**：跨班检索、超级管理员、PDF/OCR、流式多轮对话、作业流程、MCP（属于后续课程）。
