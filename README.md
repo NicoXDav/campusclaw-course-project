@@ -14,7 +14,10 @@
 
 ```sh
 python3 scripts/setup_env.py
-docker compose up --build -d
+docker compose build
+# 首次先缓存模型，避免下载时间占用Web进程的启动超时
+docker compose run --rm --no-deps api python scripts/warm_model.py
+docker compose up -d
 docker compose logs -f api
 ```
 
@@ -83,6 +86,8 @@ docker compose exec api python -m pytest -q
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 .venv/bin/python scripts/e2e.py
+# 演示环境专用：短暂停Qdrant并down/up检查持久性，不删卷
+.venv/bin/python scripts/verify_operations.py
 # OpenSpec结构验证（Node 20.19+）
 npm install
 npm run spec:validate

@@ -1,0 +1,265 @@
+{
+  "timestamp": "2026-09-26 16:10:20",
+  "base_url": "http://127.0.0.1:8084",
+  "providers": "MySQL ngram + Qdrant + real embedding model",
+  "checks": [
+    {
+      "name": "公开健康检查",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "未登录检索401",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "登录 teacher1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "登录 student1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "登录 student2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "真实Qdrant可用",
+      "passed": true,
+      "detail": {
+        "chat_configured": false,
+        "class_id": 1,
+        "embedding_model": "BAAI/bge-small-zh-v1.5",
+        "ok": true,
+        "vector_store": "ready"
+      }
+    },
+    {
+      "name": "keyword HTTP 200: 借阅期限",
+      "passed": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "keyword 返回本班真实命中",
+      "passed": true,
+      "detail": [
+        {
+          "title": "A班-知识库与课程实践",
+          "chunk_id": 1,
+          "score": 0.6343333721160889,
+          "vector_score": null
+        }
+      ]
+    },
+    {
+      "name": "keyword 字符范围与正文一致",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "keyword 来源页面可打开",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "keyword 跨班来源404",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "vector HTTP 200: 借的书可以延长归还时间吗？",
+      "passed": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "vector 返回本班真实命中",
+      "passed": true,
+      "detail": [
+        {
+          "title": "A班-知识库与课程实践",
+          "chunk_id": 1,
+          "score": 0.5198351,
+          "vector_score": 0.5198351
+        }
+      ]
+    },
+    {
+      "name": "vector 字符范围与正文一致",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "vector 来源页面可打开",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "vector 跨班来源404",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "hybrid HTTP 200: 借的书可以延长归还时间吗？",
+      "passed": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "hybrid 返回本班真实命中",
+      "passed": true,
+      "detail": [
+        {
+          "title": "A班-知识库与课程实践",
+          "chunk_id": 1,
+          "score": 0.03278688524590164,
+          "vector_score": 0.5198351
+        }
+      ]
+    },
+    {
+      "name": "hybrid 字符范围与正文一致",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "hybrid 来源页面可打开",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "hybrid 跨班来源404",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "keyword HTTP 200: 紫晶猎户座",
+      "passed": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "keyword 伪造班级不泄露B班",
+      "passed": true,
+      "detail": {
+        "hit_count": 0
+      }
+    },
+    {
+      "name": "keyword B班专有词本班无命中",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "vector HTTP 200: 紫晶猎户座",
+      "passed": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "vector 伪造班级不泄露B班",
+      "passed": true,
+      "detail": {
+        "hit_count": 0
+      }
+    },
+    {
+      "name": "vector B班专有词本班无命中",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "hybrid HTTP 200: 紫晶猎户座",
+      "passed": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "hybrid 伪造班级不泄露B班",
+      "passed": true,
+      "detail": {
+        "hit_count": 0
+      }
+    },
+    {
+      "name": "hybrid B班专有词本班无命中",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "无据短回答不生成",
+      "passed": true,
+      "detail": {
+        "status": 200,
+        "body": {
+          "answer": "资料中未找到相关内容",
+          "citations": [],
+          "generated": false,
+          "ok": true
+        }
+      }
+    },
+    {
+      "name": "学生上传403",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "教师上传并索引201",
+      "passed": true,
+      "detail": {
+        "chunk_count": 5,
+        "index_status": "ready",
+        "item": {
+          "id": 3,
+          "title": "验收-课堂讲义"
+        },
+        "message": "上传并索引成功",
+        "ok": true
+      }
+    },
+    {
+      "name": "本班学生下载",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "跨班下载404",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "教师更换策略重建",
+      "passed": true,
+      "detail": {
+        "chunk_count": 4,
+        "index_status": "ready",
+        "ok": true
+      }
+    },
+    {
+      "name": "未配置生成网关明确503",
+      "passed": true,
+      "detail": {
+        "message": "检索已完成；尚未配置生成网关 CHAT_BASE_URL / CHAT_API_KEY"
+      }
+    }
+  ],
+  "chat": {
+    "configured": false,
+    "verified": false
+  },
+  "persistence_material_id": 3
+}

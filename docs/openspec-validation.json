@@ -5,14 +5,14 @@
       "type": "change",
       "valid": true,
       "issues": [],
-      "durationMs": 10
+      "durationMs": 11
     },
     {
       "id": "auth-upload",
       "type": "spec",
       "valid": true,
       "issues": [],
-      "durationMs": 2
+      "durationMs": 3
     }
   ],
   "summary": {

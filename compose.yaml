@@ -24,6 +24,7 @@ services:
       CHAT_API_KEY: ${CHAT_API_KEY:-}
       CHAT_MODEL: ${CHAT_MODEL:-}
       COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      HF_HUB_DISABLE_XET: "1"
       HF_ENDPOINT: ${HF_ENDPOINT:-https://huggingface.co}
     volumes: ["uploads:/srv/data/uploads", "models:/srv/data/models"]
     depends_on:

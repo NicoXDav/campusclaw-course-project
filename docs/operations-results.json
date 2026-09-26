@@ -1,0 +1,77 @@
+{
+  "checks": [
+    {
+      "name": "Qdrant停止时 keyword",
+      "passed": true,
+      "detail": {
+        "status": 200,
+        "hit_count": 2
+      }
+    },
+    {
+      "name": "Qdrant停止时 vector",
+      "passed": true,
+      "detail": {
+        "status": 503,
+        "hit_count": 0
+      }
+    },
+    {
+      "name": "Qdrant停止时 hybrid",
+      "passed": true,
+      "detail": {
+        "status": 503,
+        "hit_count": 0
+      }
+    },
+    {
+      "name": "关键字依赖故障仍有正文",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Qdrant恢复后向量检索恢复",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "down/up后账号可登录",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "down/up后正文不变",
+      "passed": true,
+      "detail": {
+        "material_id": 3,
+        "sha256": "69e3e6fdc4cd0d5d0b0c142cb4a83101f07584df5a4d15f046500b8405765aba"
+      }
+    },
+    {
+      "name": "down/up后向量与切片主键不变",
+      "passed": true,
+      "detail": {
+        "chunk_ids": [
+          1,
+          8,
+          9,
+          10,
+          11
+        ]
+      }
+    },
+    {
+      "name": "真实MySQL-Qdrant关联与无旧向量残留",
+      "passed": true,
+      "detail": {
+        "ready_chunks": 6,
+        "vector_points": 6,
+        "point_id_matches_sql": true,
+        "payload_has_text": false,
+        "fulltext_index": true,
+        "dimension": 512
+      }
+    }
+  ],
+  "compose_ps": "NAME                  IMAGE                   COMMAND                  SERVICE   CREATED          STATUS                    PORTS\ncampusclaw-api-1      campusclaw-api          \"gunicorn --bind 0.0…\"   api       15 seconds ago   Up 9 seconds (healthy)    \ncampusclaw-db-1       mysql:8.4               \"docker-entrypoint.s…\"   db        15 seconds ago   Up 15 seconds (healthy)   3306/tcp, 33060/tcp\ncampusclaw-qdrant-1   qdrant/qdrant:v1.15.4   \"./entrypoint.sh\"        qdrant    15 seconds ago   Up 15 seconds             6333-6334/tcp\ncampusclaw-web-1      nginx:1.28-alpine       \"/docker-entrypoint.…\"   web       15 seconds ago   Up 4 seconds              127.0.0.1:8084->80/tcp\n"
+}

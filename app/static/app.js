@@ -173,7 +173,8 @@ function bindUpload() {
     xhr.addEventListener("load", () => {
       let data = {};
       try { data = JSON.parse(xhr.responseText); } catch {}
-      if (xhr.status === 200 && data.ok) {
+      if (xhr.status === 401) { location.href = "/login"; return; }
+      if (xhr.status >= 200 && xhr.status < 300 && data.ok) {
         toast(data.message || "上传成功");
         dialog.close();
         refresh();
