@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>登录 · 班级材料平台</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="login-body">
+  <main class="login-card">
+    <div class="brand">
+      <div class="brand-mark">材</div>
+      <div>
+        <h1>班级材料平台</h1>
+        <p class="brand-sub">Class Materials · 迭代 1</p>
+      </div>
+    </div>
+
+    <form id="login-form" autocomplete="off">
+      <label for="username">用户名</label>
+      <input id="username" name="username" type="text" placeholder="teacher1 / student1 …" required>
+
+      <label for="password">密码</label>
+      <input id="password" name="password" type="password" placeholder="••••••" required>
+
+      <button type="submit" class="btn btn-primary btn-block" id="login-btn">登 录</button>
+      <p id="login-error" class="login-error" hidden></p>
+    </form>
+
+    <footer class="login-foot">
+      <span>身份、角色与班级由服务端会话识别</span>
+      <button id="theme-toggle" class="icon-btn" title="切换深浅色">🌗</button>
+    </footer>
+  </main>
+<script src="/static/login.js"></script>
+</body>
+</html>

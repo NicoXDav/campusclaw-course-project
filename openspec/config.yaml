@@ -1,0 +1,5 @@
+schema: spec-driven
+context: |
+  CampusClaw 课程迭代：Python Flask、MySQL 8.4、Qdrant。
+  本班范围只来自服务端会话；先规约、再实现、再验收。
+  第四课 change 保留为 active，供作业审阅，不提前归档。

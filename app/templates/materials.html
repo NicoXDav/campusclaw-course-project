@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>材料 · 班级材料平台</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand brand-sm">
+      <div class="brand-mark">材</div>
+      <div>
+        <strong>班级材料平台</strong>
+        <span id="class-name" class="muted"></span>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button class="icon-btn" id="palette-btn" title="命令面板 (Ctrl/Cmd+K)">⌘ 命令</button>
+      <button class="icon-btn" id="theme-toggle" title="切换深浅色">🌗</button>
+      <span class="user-chip"><b id="me-name"></b><i id="me-role" class="role-badge"></i></span>
+      <button class="btn btn-ghost" id="logout-btn">退出</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="toolbar">
+      <input id="search" class="search" type="search"
+             placeholder="本班搜索（标题 / 正文摘要，仅过滤本班已加载数据）">
+      <div class="view-switch">
+        <button id="view-list" class="icon-btn active" title="列表视图">☰</button>
+        <button id="view-grid" class="icon-btn" title="网格视图">▦</button>
+      </div>
+      <button id="upload-btn" class="btn btn-primary" hidden>⬆ 上传材料</button>
+    </section>
+
+    <section id="list" class="material-list"></section>
+    <section id="grid" class="material-grid" hidden></section>
+    <p id="empty" class="empty" hidden>本班暂无材料，列表来自按班级过滤的数据库查询。</p>
+  </main>
+
+  <!-- 上传对话框 -->
+  <dialog id="upload-dialog" class="dialog">
+    <form id="upload-form">
+      <h3>上传材料 <span class="muted">（.txt / .md ≤ 2 MB）</span></h3>
+      <input id="file-input" type="file" accept=".txt,.md" required>
+      <div class="progress" id="progress" hidden><div class="progress-bar" id="progress-bar"></div></div>
+      <p id="progress-text" class="muted" hidden></p>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-ghost" id="upload-cancel">取消</button>
+        <button type="submit" class="btn btn-primary" id="upload-submit">上传</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- 详情对话框 -->
+  <dialog id="detail-dialog" class="dialog dialog-wide">
+    <div id="detail-body"></div>
+    <div class="dialog-actions">
+      <button type="button" class="btn btn-ghost" id="detail-close">关闭</button>
+      <a id="detail-download" class="btn btn-primary" href="#">⬇ 下载</a>
+    </div>
+  </dialog>
+
+  <!-- 命令面板 -->
+  <dialog id="palette" class="palette">
+    <input id="palette-input" type="text" placeholder="输入命令…（↑↓ 选择，回车执行）">
+    <ul id="palette-list"></ul>
+  </dialog>
+
+  <div id="toasts" class="toasts"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>
