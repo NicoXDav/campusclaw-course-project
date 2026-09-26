@@ -28,7 +28,7 @@
       });
       const data = await res.json();
       if (res.ok && data.ok) {
-        location.href = "/materials";
+        location.href = "/search";
       } else {
         // R1.2 统一文案，由服务端返回
         errEl.textContent = data.message || "用户名或密码错误";

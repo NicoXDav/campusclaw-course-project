@@ -16,7 +16,7 @@
 ### New Capabilities
 - `knowledge-retrieval`: 本班切分、向量入库、三路检索、内容溯源、短回答和索引重建。
 ### Modified Capabilities
-无：第三课 auth-upload 的用户行为保持有效；内部存储由 SQLite 迁移设计为 MySQL，既有本地作业数据不自动迁移、不上传。
+- `auth-upload`：补齐最新第三课教程的失败响应同形、口令验证等时处理与登录限流；内部存储由 SQLite 升级为 MySQL，既有个人作业数据不自动迁移、不上传。
 
 ## Impact
 后端延续 Flask，以 MySQL + Qdrant 对齐当前课件的存储链路。Compose 仅 Nginx 暴露宿主端口。复用第三课界面基础并增加检索页；源码、规约、测试和运行说明在同一仓库。

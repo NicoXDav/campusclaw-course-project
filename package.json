@@ -1,0 +1,6 @@
+{
+  "name": "campusclaw-specs",
+  "private": true,
+  "scripts": {"spec:validate": "openspec validate --all --strict"},
+  "devDependencies": {"@fission-ai/openspec": "1.13.2"}
+}

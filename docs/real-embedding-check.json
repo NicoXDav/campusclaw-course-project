@@ -1,0 +1,27 @@
+{
+  "model": "BAAI/bge-small-zh-v1.5",
+  "dimension": 512,
+  "source": "A班种子讲义",
+  "results": [
+    {
+      "query": "借的书可以延长归还时间吗？",
+      "cosine": 0.5198351075561517,
+      "passes_0_35": true
+    },
+    {
+      "query": "紫晶猎户座",
+      "cosine": 0.2046636153978686,
+      "passes_0_35": false
+    },
+    {
+      "query": "明天天气如何",
+      "cosine": 0.2504190378628153,
+      "passes_0_35": false
+    },
+    {
+      "query": "欧冠比分",
+      "cosine": 0.2352467861162031,
+      "passes_0_35": false
+    }
+  ]
+}
