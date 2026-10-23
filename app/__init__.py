@@ -34,6 +34,7 @@ def create_app(config=None):
         EMBEDDING_BASE_URL=os.getenv('EMBEDDING_BASE_URL',''), EMBEDDING_API_KEY=os.getenv('EMBEDDING_API_KEY',''),
         CHAT_BASE_URL=os.getenv('CHAT_BASE_URL',''), CHAT_API_KEY=os.getenv('CHAT_API_KEY',''),
         CHAT_MODEL=os.getenv('CHAT_MODEL',''), DEMO_PASSWORD=os.getenv('DEMO_PASSWORD',''),
+        LLM_PROVIDER=os.getenv('LLM_PROVIDER','mock'), MCP_URL=os.getenv('MCP_URL',''),
         MAX_CONTENT_LENGTH=2*1024*1024+65536, LOGIN_LIMIT=30, LOGIN_WINDOW=60, LOGIN_MIN_SECONDS=0.12,
         COOKIE_SECURE=os.getenv('COOKIE_SECURE','false').lower()=='true', SEED=True, BOOTSTRAP_INDEX=True)
     if config:
@@ -117,11 +118,11 @@ def create_app(config=None):
 
     @app.get('/')
     def home():
-        return redirect('/search' if g.user else '/login')
+        return redirect('/platform' if g.user else '/login')
 
     @app.get('/login')
     def login_page():
-        return render_template('login.html') if not g.user else redirect('/search')
+        return render_template('login.html') if not g.user else redirect('/platform')
 
     @app.get('/materials')
     @authenticated()
@@ -179,7 +180,8 @@ def create_app(config=None):
     def me():
         with sessions() as s:
             name=s.get(ClassRoom,g.user.class_id).name
-        return jsonify(ok=True,user={'username':g.user.username,'role':g.user.role,'class_id':g.user.class_id,'class_name':name})
+        return jsonify(ok=True,user={'username':g.user.username,'role':g.user.role,'class_id':g.user.class_id,'class_name':name},
+            auth={'scheme':'opaque-token','transport':'HttpOnly Cookie','expires_in_seconds':28800})
 
     @app.get('/api/materials')
     @authenticated()
@@ -314,7 +316,8 @@ def create_app(config=None):
         markers={int(x) for x in re.findall(r'\[(\d+)\]',answer)}
         if markers != set(ids):
             return jsonify(ok=False,message='模型引用编号与证据不一致'),502
-        return jsonify(ok=True,answer=answer,citations=[dict(hits[i-1],citation=i) for i in sorted(set(ids))],generated=True)
+        return jsonify(ok=True,answer=answer,citations=[dict(hits[i-1],citation=i) for i in sorted(set(ids))],
+            generated=True,answer_mode=output.get('mode','gateway'))
 
     @app.get('/health')
     def health():
@@ -332,8 +335,10 @@ def create_app(config=None):
             vectors.ensure(); vector_status='ready'
         except Exception:
             vector_status='unavailable'
+        configured=bool(app.config['CHAT_BASE_URL'] and app.config['CHAT_API_KEY'])
         return jsonify(ok=True,vector_store=vector_status,embedding_model=app.config['EMBEDDING_MODEL'],
-            chat_configured=bool(app.config['CHAT_BASE_URL'] and app.config['CHAT_API_KEY']),
+            chat_configured=configured,answer_available=True,
+            answer_mode='gateway' if configured else 'extractive',
             class_id=g.user.class_id)
 
     if app.config['SEED']:
@@ -344,4 +349,6 @@ def create_app(config=None):
             pending=list(s.execute(select(Material.id,Material.class_id).where(Material.index_status=='pending')))
         for material_id,class_id in pending:
             retrieval.index(material_id,class_id)
+    from .platform import register_platform
+    register_platform(app,authenticated,body)
     return app

@@ -75,6 +75,16 @@ class Skill(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(80))
 
+class PlatformRecord(Base):
+    __tablename__ = 'platform_records'
+    id: Mapped[str] = mapped_column(String(40), primary_key=True)
+    kind: Mapped[str] = mapped_column(String(24), index=True)
+    class_id: Mapped[int] = mapped_column(Integer, index=True)
+    user_id: Mapped[int] = mapped_column(Integer, index=True)
+    payload: Mapped[str] = mapped_column(Text().with_variant(LONGTEXT(), 'mysql'))
+    created_at: Mapped[float] = mapped_column(Float, default=time.time)
+
+
 def database(url):
     engine = create_engine(url, pool_pre_ping=True)
     Base.metadata.create_all(engine)

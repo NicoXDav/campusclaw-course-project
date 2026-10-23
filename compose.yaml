@@ -23,6 +23,8 @@ services:
       CHAT_BASE_URL: ${CHAT_BASE_URL:-}
       CHAT_API_KEY: ${CHAT_API_KEY:-}
       CHAT_MODEL: ${CHAT_MODEL:-}
+      LLM_PROVIDER: ${LLM_PROVIDER:-mock}
+      MCP_URL: http://mcp:8090/mcp
       COOKIE_SECURE: ${COOKIE_SECURE:-false}
       HF_HUB_DISABLE_XET: "1"
       HF_ENDPOINT: ${HF_ENDPOINT:-https://huggingface.co}
@@ -51,6 +53,10 @@ services:
       interval: 5s
       timeout: 5s
       retries: 30
+  mcp:
+    build: .
+    command: ["gunicorn", "--bind", "0.0.0.0:8090", "app.mcp_server:create_mcp_app()"]
+    restart: unless-stopped
   qdrant:
     image: qdrant/qdrant:v1.15.4
     volumes: ["vectors:/qdrant/storage"]

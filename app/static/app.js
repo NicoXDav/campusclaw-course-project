@@ -255,7 +255,12 @@ async function refresh() {
 
   try {
     const res = await api("/api/me");        // R9.2
-    ME = (await res.json()).user;
+    const identity = await res.json();
+    ME = identity.user;
+    const auth = identity.auth || {};
+    document.getElementById("auth-state").textContent = auth.scheme === "opaque-token"
+      ? "● Token 已认证 · HttpOnly"
+      : "● 已认证";
   } catch { return; }                        // 401 已由 api() 跳转登录
   document.getElementById("me-name").textContent = ME.username;
   document.getElementById("me-role").textContent = ME.role === "teacher" ? "教师" : "学生";

@@ -61,6 +61,7 @@ def test_auth_and_rotating_sessions(app):
     unknown=c.post('/api/login',json={'username':'missing','password':'wrong'})
     assert wrong.status_code==unknown.status_code==401 and wrong.json==unknown.json
     c=login(app);old=c.get_cookie('campus_session').value
+    assert c.get('/api/me').json['auth']=={'scheme':'opaque-token','transport':'HttpOnly Cookie','expires_in_seconds':28800}
     assert c.post('/api/login',json={'username':'student1','password':'test-password'}).status_code==200
     assert c.get_cookie('campus_session').value!=old
     old_client=app.test_client();old_client.set_cookie('campus_session',old)
@@ -158,7 +159,8 @@ def test_ask_no_evidence_and_citations(app):
 
 def test_unconfigured_real_chat(app):
     from app.providers import Chat
-    with pytest.raises(DependencyError):Chat({}).answer('test',[{}])
+    result=Chat({}).answer('借多久？',[{'excerpt':'图书借阅期限为三十天。'}])
+    assert result['mode']=='extractive' and result['citations']==[1] and '[1]' in result['answer']
 
 def test_csrf(app):
     c=login(app)

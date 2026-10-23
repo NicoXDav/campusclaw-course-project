@@ -1,5 +1,6 @@
 import json
 import math
+import re
 import threading
 import requests
 from qdrant_client import QdrantClient, models
@@ -108,7 +109,7 @@ class Chat:
 
     def answer(self, question, hits):
         if not self.c.get('CHAT_BASE_URL') or not self.c.get('CHAT_API_KEY'):
-            raise DependencyError('检索已完成；尚未配置生成网关 CHAT_BASE_URL / CHAT_API_KEY')
+            return self.extractive_answer(question, hits)
         evidence = [{'citation': i, 'title': h['title'], 'chunk_index': h['chunk_index'],
                      'text': h['excerpt']} for i,h in enumerate(hits,1)]
         try:
@@ -125,3 +126,28 @@ class Chat:
             return json.loads(value)
         except Exception as e:
             raise DependencyError('生成网关失败或响应格式无效') from e
+
+    @staticmethod
+    def extractive_answer(question, hits):
+        """无外部网关时的轻量回退：只抽取命中证据里的原句，不引入外部知识。"""
+        terms=set(re.findall(r'[\u4e00-\u9fff]{2,}|[A-Za-z0-9_]{2,}', question or ''))
+        candidates=[]
+        for citation,hit in enumerate(hits,1):
+            for sentence in re.split(r'(?<=[。！？；])|\n+', hit.get('excerpt','')):
+                sentence=sentence.strip().lstrip('#').strip()
+                if len(sentence)<4:
+                    continue
+                overlap=sum(len(term) for term in terms if term in sentence)
+                char_overlap=len(set(question or '') & set(sentence))
+                candidates.append((overlap*10+char_overlap, -len(sentence), citation, sentence))
+        if not candidates:
+            return {'answer':'资料中未找到相关内容','citations':[],'mode':'extractive'}
+        candidates.sort(reverse=True)
+        chosen=[];used=set()
+        for _,__,citation,sentence in candidates:
+            if citation in used:
+                continue
+            chosen.append(f'{sentence}[{citation}]');used.add(citation)
+            if len(chosen)==2:
+                break
+        return {'answer':'\n'.join(chosen),'citations':sorted(used),'mode':'extractive'}
