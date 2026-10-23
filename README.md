@@ -1,4 +1,60 @@
-# CampusClaw · 本班可追溯知识库
+# CampusClaw · 个人 AI 应用平台
+
+个人项目阶段性验收（2026-10-23）。孙翌程，2601210437。
+
+开发仓库：<https://github.com/NicoXDav/campusclaw-course-project>
+
+平台面向课程学习与个人项目实践，将应用、提示词模板、本班知识库、Skill 和工具整合在一个工作空间。登录后进入 `/platform`。保留原有认证、材料管理、知识检索和出处页面。
+
+## 中期验收交付
+
+| 要求 | 实现入口 | 证据 |
+|---|---|---|
+| 多个 AI 应用 | 学习规划助手、课程知识助手、效率工具助手 | `app/platform.py` 的应用目录；平台截图 |
+| 提示词模板 | 内置模板、教师自定义模板、变量替换 | `02_template` 请求的 system 消息 |
+| 知识库检索 | 三种检索方式，最多选取 4 条本班切片 | `03_knowledge`；无关章节未发送 |
+| 内置与上传 Skill | 内置技能、上传 SKILL.md、绑定与执行 | `05_skill_bound` / `06_skill_active` / `07_uploaded_skill` |
+| 工具与 MCP | 安全计算器、独立课程 MCP HTTP 服务 | `08_calculator` / `09_mcp` 的完整往返记录 |
+
+最终报告在 `output/pdf/`。五个问题的逐项验证说明见 [中期验收说明](docs/midterm/README.md)。原始请求/响应在 `docs/midterm/traces.json`，验收结论在 `docs/midterm/verification.json`。这些公开证据只使用课程样例，不包含账号口令、Cookie 或模型网关密钥；运行中的个人追踪记录仅本人可读。
+
+## 一键准备与运行
+
+```sh
+python3 scripts/setup_env.py
+docker compose build
+docker compose run --rm --no-deps api python scripts/warm_model.py
+docker compose up -d
+```
+
+打开 <http://127.0.0.1:8084>。首次下载嵌入模型需要网络。四个账号 teacher1/student1/teacher2/student2 的口令为本地 `.env` 中的 `DEMO_PASSWORD`。教师可以上传本班材料、模板和技能；学生只读。退出、会话过期、跨班与跨用户记录访问均由后端校验。
+
+当前默认 `LLM_PROVIDER=mock`，便于无密钥环境重现中期验收；其响应为确定性模拟，验证的是消息组装、上下文选择、技能加载和工具闭环，不代表真实大模型生成质量。知识库嵌入、MySQL、Qdrant、计算器和 MCP HTTP 通信均真实运行。正常应用界面不展示测试标签，实际 provider 保留在追踪与报告中。
+
+如需真实模型，在 `.env` 配置 `LLM_PROVIDER=gateway` 以及 `CHAT_BASE_URL`、`CHAT_API_KEY`、`CHAT_MODEL`，然后 `docker compose up -d --force-recreate api`。授权头只在后端发送，不进入追踪。真实网关尚未进行在线验收。
+
+Compose 内置 MCP 服务不映射宿主端口。API 通过 `MCP_URL=http://mcp:8090/mcp` 接入；可在 Compose 的 API 环境配置中改为兼容服务地址。当前支持 2025-03-26 的无状态、JSON 响应 MCP 子集，只允许只读 `course_deadline` 工具。未开放任意远程命令、未支持 stdio/SSE 恢复或全部 MCP 能力。
+
+```sh
+# 自动化安全/业务测试
+docker compose exec api python -m pytest -q
+# 真实 HTTP / MySQL / Qdrant / MCP 验收及证据生成
+docker compose exec api python scripts/verify_midterm.py
+# 或在宿主机 .venv 中运行以直接写入本仓库 docs/midterm
+.venv/bin/python scripts/verify_midterm.py
+```
+
+注意：容器内生成的证据位于容器 `/srv/docs/midterm`，可用 `docker compose cp api:/srv/docs/midterm/. docs/midterm/` 导出。验收脚本会向演示班级写入样例模板、知识材料与技能。数据卷持久化；停止系统使用 `docker compose down`，保留卷。
+
+## 代码结构
+
+`app/platform.py` 负责应用、模板、Skill、上下文组装、受限工具循环和追踪；`app/platform_llm.py` 负责模型适配；`app/platform_tools.py` 负责计算器和 MCP 客户端；`app/mcp_server.py` 为独立 MCP 服务；`app/models.py` 的 `platform_records` 持久化模板、技能、对话与追踪。旧版检索模块保持独立。
+
+---
+
+## 第四课历史说明
+
+以下为第四课交付时的范围与演示记录；当时的“不做 Skill/MCP”已由上面的中期版本扩展。
 
 开发仓库：[NicoXDav/campusclaw-course-project](https://github.com/NicoXDav/campusclaw-course-project) · [GitHub新建与提交教程](docs/GitHub新建仓库与提交教程.md)
 
@@ -69,7 +125,7 @@ QDRANT_COLLECTION=campusclaw_chunks_new_model
 
 **更换模型需要新的collection并重建全部材料**，即使维度相同也不能混用向量。所有网关请求仅从后端发起，密钥不进入浏览器。
 
-短回答需要另外配置兼容`/chat/completions`的真实生成网关：
+短回答默认使用本地抽取式节省模式：只从检索命中的原文中选取相关句子并附引用，不调用外部模型。如需生成式回答，可另外配置兼容`/chat/completions`的真实生成网关：
 
 ```dotenv
 CHAT_BASE_URL=https://课程提供的地址/v1
@@ -77,7 +133,7 @@ CHAT_API_KEY=在本地填写
 CHAT_MODEL=课程提供的聊天模型名
 ```
 
-运行`docker compose up -d --force-recreate api web`应用环境配置。Base URL不要重复写`/chat/completions`或`/embeddings`。无生成网关时，三种检索和溯源仍可用；有依据的ask会明确返回503，页面标注“待配置网关”。本仓不把摘录或测试桩伪装为生成模型。
+运行`docker compose up -d --force-recreate api web`应用环境配置。Base URL不要重复写`/chat/completions`或`/embeddings`。无生成网关时，三种检索、溯源和本地抽取式短回答仍可用；页面会如实标注“本地节省模式”，不把摘录伪装为生成模型。
 
 ## 验证
 

@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-23",
+  "llm_provider": "mock",
+  "environment": "real HTTP / MySQL / Qdrant / Chinese embeddings / independent MCP HTTP server",
+  "results": [
+    {
+      "name": "内置至少三个应用",
+      "passed": true
+    },
+    {
+      "name": "未认证拒绝访问",
+      "passed": true
+    },
+    {
+      "name": "Token 身份恢复",
+      "passed": true
+    },
+    {
+      "name": "模板原文经变量替换进入 system",
+      "passed": true
+    },
+    {
+      "name": "模板不改变原始 user 消息",
+      "passed": true
+    },
+    {
+      "name": "真实嵌入与 Qdrant 索引",
+      "passed": true
+    },
+    {
+      "name": "知识库只提交前四条命中",
+      "passed": true
+    },
+    {
+      "name": "未把无关章节传给模型",
+      "passed": true
+    },
+    {
+      "name": "发送的证据小于整份原文",
+      "passed": true
+    },
+    {
+      "name": "无证据明确告知",
+      "passed": true
+    },
+    {
+      "name": "仅绑定只发送技能元数据",
+      "passed": true
+    },
+    {
+      "name": "执行技能才发送完整正文",
+      "passed": true
+    },
+    {
+      "name": "记录技能执行逻辑",
+      "passed": true
+    },
+    {
+      "name": "上传技能成功",
+      "passed": true
+    },
+    {
+      "name": "上传技能正文进入执行请求",
+      "passed": true
+    },
+    {
+      "name": "本地工具真实计算",
+      "passed": true
+    },
+    {
+      "name": "MCP 发现工具",
+      "passed": true
+    },
+    {
+      "name": "MCP 首轮只发送工具定义",
+      "passed": true
+    },
+    {
+      "name": "MCP 第二轮包含 tool 返回",
+      "passed": true
+    },
+    {
+      "name": "真实 HTTP MCP 四步生命周期",
+      "passed": true
+    },
+    {
+      "name": "本人可读取持久化追踪",
+      "passed": true
+    },
+    {
+      "name": "多轮对话传入上轮历史",
+      "passed": true
+    },
+    {
+      "name": "跨用户跨班追踪记录不可见",
+      "passed": true
+    },
+    {
+      "name": "客户端 system 注入被忽略",
+      "passed": true
+    },
+    {
+      "name": "未绑定技能拒绝执行",
+      "passed": true
+    },
+    {
+      "name": "工具代码注入拒绝",
+      "passed": true
+    }
+  ]
+}
